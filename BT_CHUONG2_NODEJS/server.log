@@ -1,0 +1,13 @@
+2023-10-27 10:00:05 INFO: Server started successfully on port 3000
+2023-10-27 10:01:20 INFO: New user connected from IP 192.168.1.100
+2023-10-27 10:02:35 WARNING: High CPU usage detected, current load: 85%
+2023-10-27 10:03:40 ERROR: Failed to connect to database server at 127.0.0.1:5432
+2023-10-27 10:03:40 ERROR: Error details: Connection refused
+2023-10-27 10:05:00 INFO: User 'admin' logged in successfully
+2023-10-27 10:06:15 WARNING: Low disk space remaining on volume /var, free space: 100MB
+2023-10-27 10:07:30 INFO: Processing request from user 'guest' - URL: /api/data
+2023-10-27 10:08:45 ERROR: Exception occurred while processing request - Request ID: #12345
+2023-10-27 10:08:45 ERROR: Exception details: TypeError: Cannot read property 'name' of undefined
+2023-10-27 10:10:00 INFO: Server status check - OK
+2023-10-27 10:11:15 WARNING: Potential security vulnerability detected - suspicious activity from IP 192.168.1.200
+2023-10-27 10:12:30 INFO: Application shutting down gracefully

@@ -1,0 +1,6 @@
+{
+  "appName": "My Simple App",
+  "version": "1.0.0",
+  "logLevel": "INFO",
+  "theme": "light"
+}

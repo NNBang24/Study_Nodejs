@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "Quần áo nam",
+    "description": "Các sản phẩm thời trang dành cho nam giới"
+  },
+  {
+    "id": 2,
+    "name": "Quần áo nữ",
+    "description": "Bộ sưu tập thời trang nữ mới nhất"
+  },
+  {
+    "id": 3,
+    "name": "Phụ kiện",
+    "description": "Các loại phụ kiện thời trang như túi xách, thắt lưng, mũ..."
+  },
+  {
+    "id": 4,
+    "name": "Giày dép",
+    "description": "Các sản phẩm giày dép cho cả nam và nữ"
+  },
+  {
+    "name": "Giày ",
+    "description": "Các sản phẩm giày dép cho nam......",
+    "id": 5
+  }
+]

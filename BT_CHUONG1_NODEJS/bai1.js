@@ -1,0 +1,9 @@
+// cau 1 dap an A
+// cau 2 dap an C
+// cau 3 dap an B
+// cau 4 dap an B 
+// cau 5 dap an C 
+// cau 6 dap an C 
+// cau 7 dap an C 
+// cau 8 dap an C 
+// cau 9 dap an A 
