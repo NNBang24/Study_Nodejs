@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>checkout demo</title>
+</head>
+
+<body>
+    <form id="payment-form">
+        <div id="card-element">
+
+        </div>
+        <button type="submit" id="submit-btn">payment</button>
+        <div role="alert" id="payment-message"></div>
+    </form>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe('pk_test_51ScOhWHdtbLnfHGCwSMf4qeJlVDzJhU9ueNP1FC5zW3YLNTDLPEqyk01IOnT4davrPaT6813DlrZJ10REAwSMduz00cYwiqoxA');
+
+        let elements;
+        let cardElement;
+        let clientSecret;
+
+        async function initialize() {
+            const response = await fetch('/create-payment-intent', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items: [{ id: 't-shirt' }, { id: 'sneaker' }],
+                    currency: 'usd'
+                }),
+            });
+
+            const data = await response.json();
+            clientSecret = data.clientSecret;
+
+            elements = stripe.elements();
+            cardElement = elements.create('card');
+            cardElement.mount("#card-element");
+        }
+
+        initialize();
+
+        const form = document.getElementById("payment-form");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            setLoading(true);
+
+            const { error, paymentIntent } = await stripe.confirmCardPayment(
+                clientSecret,
+                {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: "Nhat Bang",
+                        }
+                    }
+                }
+            );
+
+            if (error) {
+                showMessage(`Payment failed: ${error.message}`);
+            } else {
+                showMessage(`Payment success: ${paymentIntent.status}`);
+            }
+
+            setLoading(false);
+        });
+
+        function showMessage(text) {
+            document.querySelector("#payment-message").textContent = text;
+        }
+
+        function setLoading(isLoading) {
+            document.querySelector('#submit-btn').disabled = isLoading;
+        }
+    </script>
+</body>
+
+</html> 

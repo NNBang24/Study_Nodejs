@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
-
-
-
-const { Category ,Product} = require('../models');
+const { Category, Product } = require('../models');
+const { body, validationResult } = require('express-validator')
 const e = require('express');
-const {body} = require('express-validator')
+const handleValidationErrors = require('../middlewares/validationErrorHandler');
+const { commonIdParamValidation, createCategoryValidationRules, updateCategoryValidationRules } = require('../validators/categoryValidator');
+
 // Lay tat ca danh muc 
 router.get('/', async (req, res, next) => {
     try {
         const categories = await Category.findAll(
             {
-                include : [{
+                include: [{
                     model: Product,
-                    as: 'products' 
+                    as: 'products'
                 }]
             }
         );
@@ -24,7 +24,9 @@ router.get('/', async (req, res, next) => {
 })
 
 // lay danh muc theo id 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id',
+    commonIdParamValidation,
+    async (req, res, next) => {
     try {
         const categories = await Category.findByPk(req.params.id);
         if (!categories) {
@@ -38,22 +40,33 @@ router.get('/:id', async (req, res, next) => {
 })
 // them danh mu 
 router.post('/',
-    body('name').notEmpty().withMessage('khong duco bo trong'),
+    createCategoryValidationRules ,
+    handleValidationErrors,
     async (req, res, next) => {
 
-    try {
-        const newCategory = await Category.create(req.body);
-        res.status(201).json(newCategory)
-    } catch (error) {
-        if (error.name = 'SequelizeUniqueConstraintError') {
-            return res.status(400).json({ message: 'ten da co trong danh muc ' })
+        try {
+            const newCategory = await Category.create(req.body);
+            res.status(201).json(newCategory)
+        } catch (error) {
+            if (error.name = 'SequelizeUniqueConstraintError') {
+                return res.status(400).json(
+                    {
+                        error: [{
+                            msg: " ten danh muc bi trung ",
+                            param: 'name',
+                            location: 'body'
+                        }]
+                    }
+                )
+            }
+            next(error)
         }
-        next(error)
-    }
-})
+    })
 
 // sua  danh muc
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id',
+    updateCategoryValidationRules ,
+    async (req, res, next) => {
     try {
         // updateRows : la so dong de cap nhat 
         const [updateRows] = await Category.update(req.body, {
@@ -69,7 +82,9 @@ router.patch('/:id', async (req, res, next) => {
     }
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id',
+    commonIdParamValidation ,
+    async (req, res, next) => {
     try {
         const deleteRows = await Category.destroy({
             where: { id: req.params.id }

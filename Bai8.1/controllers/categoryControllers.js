@@ -1,19 +1,12 @@
-const express = require('express');
-const router = express.Router();
+const { Category ,Product } = require('../models');
 
-
-
-const { Category ,Product} = require('../models');
-const e = require('express');
-const {body} = require('express-validator')
-// Lay tat ca danh muc 
-router.get('/', async (req, res, next) => {
+exports.getAllCategories = async (req, res, next) => {
     try {
         const categories = await Category.findAll(
             {
-                include : [{
+                include: [{
                     model: Product,
-                    as: 'products' 
+                    as: 'products'
                 }]
             }
         );
@@ -21,10 +14,9 @@ router.get('/', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
+};
 
-// lay danh muc theo id 
-router.get('/:id', async (req, res, next) => {
+exports.getCategoryById = async (req, res, next) => {
     try {
         const categories = await Category.findByPk(req.params.id);
         if (!categories) {
@@ -35,25 +27,31 @@ router.get('/:id', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
-// them danh mu 
-router.post('/',
-    body('name').notEmpty().withMessage('khong duco bo trong'),
-    async (req, res, next) => {
+}
+
+exports.createCategory = async (req, res, next) => {
 
     try {
         const newCategory = await Category.create(req.body);
         res.status(201).json(newCategory)
     } catch (error) {
-        if (error.name = 'SequelizeUniqueConstraintError') {
-            return res.status(400).json({ message: 'ten da co trong danh muc ' })
-        }
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({
+                error: [
+                    {
+                        msg: "Ten danh muc da ton tai",
+                        param: 'name',
+                        location: 'body'
+                    }
+                ]
+            })
+        } // day la dieu kien de check la  ten san pham da ton tai tren
+
         next(error)
     }
-})
+};
 
-// sua  danh muc
-router.patch('/:id', async (req, res, next) => {
+exports.updateCategory = async (req, res, next) => {
     try {
         // updateRows : la so dong de cap nhat 
         const [updateRows] = await Category.update(req.body, {
@@ -67,9 +65,9 @@ router.patch('/:id', async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-})
+};
 
-router.delete('/:id', async (req, res, next) => {
+exports.deleteCategory = async (req, res, next) => {
     try {
         const deleteRows = await Category.destroy({
             where: { id: req.params.id }
@@ -81,9 +79,4 @@ router.delete('/:id', async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-})
-module.exports = router;
-
-//Eager loading
-
-//Lazy loading
+};
