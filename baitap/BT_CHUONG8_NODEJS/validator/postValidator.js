@@ -12,7 +12,7 @@ const listPostValidationRules = () => {
             .trim()
     ]
 }
-const bookIdParamValidation = () => {
+const postIdParamValidation = () => {
     return [
         param('id')
             .notEmpty()
@@ -20,4 +20,9 @@ const bookIdParamValidation = () => {
             .toInt()
             .isInt({ min: 1 }).withMessage('id phai la so nguyen duong')
     ]
+}
+
+module.exports = {
+    listPostValidationRules , 
+    postIdParamValidation 
 }

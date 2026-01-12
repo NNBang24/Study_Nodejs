@@ -3,6 +3,7 @@ const express = require('express') ;
 const app = express() ;
 const authRouter = require('./routers/authRouter')
 const postRouter = require('./routers/postRouter')
+const userRouter = require('./routers/userRouter')
 
 const db = require('./models');
 const requestLoggerMiddlewares = require('./middlewares/requestLogger');
@@ -16,6 +17,7 @@ app.use(express.json())
 
 app.use('/api/auth' ,authRouter )
 app.use('/api/post' ,postRouter )
+app.use('/api/user' , userRouter)
 app.use(errorHandlerMiddlewares)
 db.sequelize.authenticate()
     .then( () => {

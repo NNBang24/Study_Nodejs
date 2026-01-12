@@ -1,19 +1,34 @@
-const {Post,User} = require('../models')
+const {Post,User ,Sequelize} = require('../models') ;
+const { Op } = Sequelize;
 
 exports.getAllPosts = async(req , res , next) => {
+    const page = parseInt(req.query.page) || 1 ;
+    const limit =  parseInt(req.query.limit) || 5 ;
+    const search = req.query.search || "" ;
+    const offset = (page - 1) * limit;
     try {
         const posts = await Post.findAll(
             {
+                where: {
+                    title: {
+                        [Op.like]: `%${search}%`
+                    }
+                },
                 include : [
                     {
                         model : User ,
                         as : 'user' ,
                         attributes : [ 'id' , 'username']
                     }
-                ]
+                ],
+                limit,
+                offset,
+                order: [['createdAt', 'DESC']]
             }
         )
-        res.json(posts) ;
+        res.json({
+            posts
+        });
     } catch (error) {
         next(error)
     }

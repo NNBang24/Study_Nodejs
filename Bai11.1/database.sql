@@ -1,8 +1,8 @@
 -- tao database 
-create database if not exists exppress_auth_demo ;
+create database if not exists session_cookie_demo ;
 
 -- su dung database vua tao 
-use exppress_auth_demo ;
+use session_cookie_demo;
 
 -- tao bang user users 
 create table  if not exists users (
@@ -19,13 +19,13 @@ create table  if not exists users (
  ('testUser' ,'password123' ,'test@gmail.com') ,
  ('admin' .'admin123', 'admin@gmail.com') ;
 
- select * from users
- --
 
- use exppress_auth_demo ; 
+
 
  create  table if not exists sessions ( 
     session_id VARCHAR(128) collate utf8mb4_bin NOT NULL PRIMARY KEY ,
     expires INT(11) unsigned NOT NULL ,
     data mediumtext collate utf8mb4_bin
- )
+ );
+
+  select * from users

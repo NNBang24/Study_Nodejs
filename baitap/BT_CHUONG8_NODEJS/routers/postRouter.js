@@ -3,11 +3,15 @@ const { getAllPosts, getPostById, createPost, updatePost, deletePost } = require
 const authenticateToken = require('../middlewares/authenticateToken');
 const authorizeRole = require('../middlewares/authorizeRole');
 const isAuthorOrAdmin = require('../middlewares/isAuthorOrAdmin');
+const { listPostValidationRules, postIdParamValidation } = require('../validator/postValidator');
+const handleValidationErrors = require('../middlewares/validationErrorHandler');
 
 const router = express.Router() ;
 
 
 router.get('/',
+    listPostValidationRules(),
+    handleValidationErrors,
     getAllPosts ,
 );
 
@@ -25,11 +29,15 @@ router.post('/' ,
 router.put('/:id' ,
     authenticateToken,
     isAuthorOrAdmin ,
+    postIdParamValidation() ,
+    handleValidationErrors ,
     updatePost
 )
 router.delete('/:id',
     authenticateToken,
     isAuthorOrAdmin,
+    postIdParamValidation() ,
+    handleValidationErrors ,
     deletePost
 )
 
